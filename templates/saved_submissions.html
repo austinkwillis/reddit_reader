@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+  {% block content %}
+  <script type="text/javascript" src="{{ url_for('static', filename='save_features.js') }}"></script>
+  <form action="{{ url_for('get_saved') }}" method="post">
+    <select name='sort'>
+    {% for item in sorts %}
+        <option  value="{{ item }}">{{ item }}</option>
+    {% endfor %}
+    </select>
+    <select name='sort_time_frame'>
+    {% for item in sort_time_frames %}
+        <option value="{{ item }}">{{ item }}</option>
+    {% endfor %}
+    </select>
+
+    <input type="submit" value="sort" />
+  </form>
+  <ul style="list-style-type:none">
+  {% for submission in submissions %}
+    <li><a href="{{ submission.url }}">
+      <p><img class="img-responsive" src="{{ submission.thumbnail }}" style="float:top;">{{ submission.title }}</p></a>
+      <a href="{{ url_for('get_comments', submission_id=submission.id) }}">Comments</a>
+      {% if not submission.saved %}
+            <a href=# id="save" name="{{ submission.id }}">Save</a>
+        {% else %}
+            <a href=# id="unsave" name="{{ submission.id }}">Unsave</a>
+        {% endif %}
+    </li>
+  {% else %}
+    <li><em>Nothing! Are you connected to the internet? Is Reddit broken?</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

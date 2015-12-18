@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+  {% block content %}
+      <h1><img class="img-responsive" src="{{ submission.thumbnail }}" style="float:top;">{{ submission.title }}</h1>
+      <ul class=submissions>
+      {% for comment in submission.comments recursive%}
+      	<li><em>{{ comment }}</em>
+      	{%- if comment.replies -%}
+        	<ul class="replies">{{ loop(comment.replies) }}</ul>
+    	{%- endif %}
+    	{%- if comment.morereplies -%}
+        	<ul >{{ loop(comment.replies) }}</ul>
+    	{%- endif %}
+      {% else %}
+        <li><em>Nothing! Are you connected to the internet? Is Reddit broken?</em>
+      {% endfor %}
+      </ul>
+  </body>
+{% endblock %}

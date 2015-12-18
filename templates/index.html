@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+  {% block content %}
+  <script type="text/javascript" src="{{ url_for('static', filename='save_features.js') }}"></script>
+      <ul style="list-style-type:none">
+      {% for submission in submissions %}
+        <li><a href="{{ submission.url }}">
+          <p><img class="img-responsive" src="{{ submission.thumbnail }}" style="float:top;">{{ submission.title }}</p></a>
+          <a href="{{ url_for('get_comments', submission_id=submission.id) }}">Comments</a>
+          {% if not submission.saved %}
+                <a href=# id="save" name="{{ submission.id }}">Save</a>
+            {% else %}
+                <a href=# id="unsave" name="{{ submission.id }}">Unsave</a>
+            {% endif %}
+        </li>
+      {% else %}
+        <li><em>Nothing! Are you connected to the internet? Is Reddit broken?</em></li>
+      {% endfor %}
+      </ul>
+      {%- if submissions.before -%}
+        <a href="{{ url_for('get_prev_page', before=submissions.before, after=submissions.after) }}">Prev</a>
+      {%- endif %}
+      {%- if submissions.after -%}
+        <a href="{{ url_for('get_next_page', before=submissions.before, after=submissions.after) }}">Next</a>
+      {%- endif %}
+  {% endblock %}

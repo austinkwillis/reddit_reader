@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+  {% block content %}
+   <script type=text/javascript>
+    $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    $(function() {
+      $('a#save').bind('click', function() {
+        $.getJSON($SCRIPT_ROOT + '/_save', {
+          submission_id: this.name
+        })
+        return false;
+      });
+  })
+    $(function() {
+      $('a#unsave').bind('click', function() {
+        $.getJSON($SCRIPT_ROOT + '/_unsave', {
+          submission_id: this.name
+        })
+        return false;
+    });
+  })
+  </script>
+      <ul class=submissions>
+      {% for submission in submissions %}
+        <li><a href="{{ submission.url }}">
+          <p><img class="img-responsive" src="{{ submission.thumbnail }}" style="float:top;">{{ submission.title }}</p></a>
+          <a href="{{ url_for('get_comments', submission_id=submission.id) }}">Comments</a>
+          {% if not submission.saved %}
+                <a href=# id="save" name="{{ submission.id }}">Save</a>
+            {% else %}
+                <a href=# id="unsave" name="{{ submission.id }}">Unsave</a>
+            {% endif %}
+        </li>
+      {% else %}
+        <li><em>Nothing! Are you connected to the internet? Is Reddit broken?</em></li>
+      {% endfor %}
+      </ul>
+      <a href="{{ url_for('next') }}">Next</a>
+  {% endblock %}
